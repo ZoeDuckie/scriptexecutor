@@ -3,10 +3,10 @@ package com.thundercloud.scriptexecutor.azuretoaws.service
 import com.thundercloud.scriptexecutor.azuretoaws.exception.ScriptServiceException
 import com.thundercloud.scriptexecutor.azuretoaws.model.Aws
 import com.thundercloud.scriptexecutor.azuretoaws.model.Azure
+import org.omg.CORBA.portable.OutputStream
 import org.springframework.stereotype.Service
-import java.io.IOException
-import java.io.InputStreamReader
-import java.io.BufferedReader
+import java.io.*
+import javax.servlet.ServletContextListener
 
 @Service
 class ScriptService {
@@ -26,10 +26,13 @@ class ScriptService {
         // -- Windows --
 
         // Run a command
-        processBuilder.command("cmd.exe", "/c", "dir C:\\Users\\Sean")
+//        processBuilder.command("cmd.exe", "/c", "az login")
 
         // Run a bat file
-        //processBuilder.command("C:\\Users\\Sean\\hello.bat");
+        processBuilder.command(
+                ServletContextListener::class.java.getClassLoader().getResource("azureExport.bat").toString().substring(6),
+                request.Username, request.Password, request.GroupName, request.VmName
+        )
 
         try {
             val process = processBuilder.start()
@@ -56,6 +59,7 @@ class ScriptService {
         } catch (e: InterruptedException) {
             throw ScriptServiceException("SAD!")
         }
+
         return output.toString()
     }
 
