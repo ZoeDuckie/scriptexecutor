@@ -1,4 +1,4 @@
-package com.thundercloud.scriptexecutor.azuretoaws.exception
+package com.thundercloud.scriptexecutor.exception
 
 import java.lang.RuntimeException
 

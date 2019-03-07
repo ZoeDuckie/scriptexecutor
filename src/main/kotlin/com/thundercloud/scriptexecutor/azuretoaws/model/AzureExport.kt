@@ -1,6 +1,6 @@
 package com.thundercloud.scriptexecutor.azuretoaws.model
 
-data class Azure (
+data class AzureExport (
   val username: String,
   val password: String,
   val groupName: String,

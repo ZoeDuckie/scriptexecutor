@@ -1,8 +1,9 @@
 REM login
 
 REM call aws configure
-call aws configure
 
 REM image import	<newInstanceName>	<containerPath>
 
-aws ec2 import-image --description= %5 --disk-containers= %6
+call aws s3 cp %1 %2
+
+call aws ec2 import-image --description %3 --disk-containers %4
