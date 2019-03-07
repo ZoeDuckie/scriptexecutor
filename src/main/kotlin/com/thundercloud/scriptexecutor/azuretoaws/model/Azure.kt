@@ -1,8 +1,8 @@
 package com.thundercloud.scriptexecutor.azuretoaws.model
 
 data class Azure (
-        val Username: String,
-        val Password: String,
-        val GroupName: String,
-        val VmName: String
+  val username: String,
+  val password: String,
+  val groupName: String,
+  val vmName: String
 )

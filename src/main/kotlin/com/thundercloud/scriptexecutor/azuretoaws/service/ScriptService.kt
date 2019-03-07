@@ -3,7 +3,6 @@ package com.thundercloud.scriptexecutor.azuretoaws.service
 import com.thundercloud.scriptexecutor.azuretoaws.exception.ScriptServiceException
 import com.thundercloud.scriptexecutor.azuretoaws.model.Aws
 import com.thundercloud.scriptexecutor.azuretoaws.model.Azure
-import org.omg.CORBA.portable.OutputStream
 import org.springframework.stereotype.Service
 import java.io.*
 import javax.servlet.ServletContextListener
@@ -13,27 +12,40 @@ class ScriptService {
 
     fun executeExportAzure(request: Azure): String {
         val processBuilder = ProcessBuilder()
-        val output = StringBuilder()
-
-        // -- Linux --
-
-        // Run a shell command
-        //processBuilder.command("bash", "-c", "ls /home/user/")
-
-        // Run a shell script
-        //processBuilder.command("path/to/hello.sh");
-
-        // -- Windows --
 
         // Run a command
-//        processBuilder.command("cmd.exe", "/c", "az login")
+        //processBuilder.command("cmd.exe", "/c", "az login")
 
         // Run a bat file
         processBuilder.command(
-                ServletContextListener::class.java.getClassLoader().getResource("azureExport.bat").toString().substring(6),
-                request.Username, request.Password, request.GroupName, request.VmName
+                ServletContextListener::class.java.getClassLoader()
+                  .getResource("azureExport.bat").toString().substring(6),
+                request.username, request.password, request.groupName, request.vmName
         )
 
+        return processScript(processBuilder)
+    }
+
+    fun executeImportAws(request: Aws): String {
+        val processBuilder = ProcessBuilder()
+
+
+        // Run a command
+        //processBuilder.command("cmd.exe", "/c", "az login")
+
+        // Run a bat file
+        processBuilder.command(
+          ServletContextListener::class.java.getClassLoader()
+            .getResource("awsImport.bat").toString().substring(6),
+          request.accessKeyId, request.secretAccessKey, request.region,
+          request.cryptogram, request.description, request.diskContainer
+        )
+
+        return processScript(processBuilder)
+    }
+
+    private fun processScript(processBuilder: ProcessBuilder): String {
+        val output = StringBuilder()
         try {
             val process = processBuilder.start()
 
@@ -48,7 +60,6 @@ class ScriptService {
 
             val exitVal = process.waitFor()
             if (exitVal == 0) {
-                println("Success!")
                 println(output)
             } else {
                 throw ScriptServiceException("Exit value was not 0. Unknown error.")
@@ -61,9 +72,5 @@ class ScriptService {
         }
 
         return output.toString()
-    }
-
-    fun executeImportAws(request: Aws): String {
-        return "success"
     }
 }

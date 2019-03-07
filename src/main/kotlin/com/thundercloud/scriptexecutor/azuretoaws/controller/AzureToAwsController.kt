@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("AzureToAws")
 class AzureToAwsController(private val service: ScriptService) {
 
-    @PostMapping("export/Azure")
+    @PostMapping("export/azure")
     fun exportAzure(@RequestBody request: Azure): String {
         return service.executeExportAzure(request)
     }
 
-    @PostMapping("import/Aws")
+    @PostMapping("import/aws")
     fun importAws(@RequestBody request: Aws): String {
         return service.executeImportAws(request)
     }
