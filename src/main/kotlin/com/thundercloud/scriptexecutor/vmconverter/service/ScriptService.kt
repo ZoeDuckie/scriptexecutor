@@ -1,16 +1,16 @@
-package com.thundercloud.scriptexecutor.azuretoaws.service
+package com.thundercloud.scriptexecutor.vmconverter.service
 
-import com.thundercloud.scriptexecutor.azuretoaws.model.AwsExport
+import com.thundercloud.scriptexecutor.vmconverter.model.AwsExport
 import com.thundercloud.scriptexecutor.exception.ScriptServiceException
-import com.thundercloud.scriptexecutor.azuretoaws.model.AwsImport
-import com.thundercloud.scriptexecutor.azuretoaws.model.AzureExport
-import com.thundercloud.scriptexecutor.azuretoaws.model.AzureImport
+import com.thundercloud.scriptexecutor.vmconverter.model.AwsImport
+import com.thundercloud.scriptexecutor.vmconverter.model.AzureExport
+import com.thundercloud.scriptexecutor.vmconverter.model.AzureImport
 import org.springframework.stereotype.Service
 import java.io.*
 import javax.servlet.ServletContextListener
 
 @Service
-class AzureToAwsScriptService {
+class ScriptService {
 
   fun executeExportAzure(request: AzureExport): String {
     val processBuilder = ProcessBuilder()
@@ -43,7 +43,7 @@ class AzureToAwsScriptService {
 
     processBuilder.command(
       ServletContextListener::class.java.getClassLoader()
-        .getResource("azureExport.bat").toString().substring(6),
+        .getResource("azureImport.bat").toString().substring(6),
         request.fileToWriteOutTo, request.nameOfVhd, request.accountName, request.accountKey, request.resourceGroup,
         request.vmName, request.os, request.adminUsername
     )
@@ -56,9 +56,9 @@ class AzureToAwsScriptService {
 
     processBuilder.command(
       ServletContextListener::class.java.getClassLoader()
-        .getResource("awsImport.bat").toString().substring(6),
-        request.instanceId, request.targetEnvironment, request.diskImageFormat, "s3://" + request.s3Bucket,
-        request.s3Prefix, request.localFileCopyLocation
+        .getResource("awsExport.bat").toString().substring(6),
+        request.instanceId, request.targetEnvironment, request.diskImageFormat, request.s3Bucket,
+        request.s3Prefix
     )
 
     return processScript(processBuilder)
@@ -83,6 +83,7 @@ class AzureToAwsScriptService {
       if (exitVal == 0) {
         println(output)
       } else {
+        println(output)
         throw ScriptServiceException("Exit value was not 0. Unknown error.")
       }
 

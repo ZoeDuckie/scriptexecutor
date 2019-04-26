@@ -1,4 +1,4 @@
-package com.thundercloud.scriptexecutor.azuretoaws.model
+package com.thundercloud.scriptexecutor.vmconverter.model
 
 data class AzureExport (
   val username: String,

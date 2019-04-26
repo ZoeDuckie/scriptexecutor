@@ -1,18 +1,18 @@
-package com.thundercloud.scriptexecutor.azuretoaws.controller
+package com.thundercloud.scriptexecutor.vmconverter.controller
 
-import com.thundercloud.scriptexecutor.azuretoaws.model.AwsExport
-import com.thundercloud.scriptexecutor.azuretoaws.model.AwsImport
-import com.thundercloud.scriptexecutor.azuretoaws.model.AzureExport
-import com.thundercloud.scriptexecutor.azuretoaws.model.AzureImport
-import com.thundercloud.scriptexecutor.azuretoaws.service.AzureToAwsScriptService
+import com.thundercloud.scriptexecutor.vmconverter.model.AwsExport
+import com.thundercloud.scriptexecutor.vmconverter.model.AwsImport
+import com.thundercloud.scriptexecutor.vmconverter.model.AzureExport
+import com.thundercloud.scriptexecutor.vmconverter.model.AzureImport
+import com.thundercloud.scriptexecutor.vmconverter.service.ScriptService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("AzureToAws")
-class ConversionController(private val service: AzureToAwsScriptService) {
+@RequestMapping("VmConversion")
+class ConversionController(private val service: ScriptService) {
 
     @PostMapping("export/azure")
     fun exportAzure(@RequestBody request: AzureExport): String {
